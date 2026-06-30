@@ -1,0 +1,29 @@
+import axios from "axios";
+import { getTokenCookie } from "../cookies";
+
+const isServer = typeof window === "undefined";
+const BASE_URL = isServer
+    ? (process.env.BACKEND_URL || "http://localhost:8089")
+    : "";
+
+const axiosInstance = axios.create({
+    baseURL: BASE_URL,
+    headers: {
+        "Content-Type": "application/json",
+    },
+});
+
+axiosInstance.interceptors.request.use(
+    async (config) => {
+        const token = await getTokenCookie();
+        if (token) {
+            config.headers["Authorization"] = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
+
+export default axiosInstance;
