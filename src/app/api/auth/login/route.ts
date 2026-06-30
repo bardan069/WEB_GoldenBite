@@ -34,9 +34,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid email or password." }, { status: 401 });
     }
 
-    const token = signToken({ sub: user._id.toString(), email: user.email, name: user.name });
+    const token = signToken({ sub: user._id.toString(), email: user.email, name: user.name, role: user.role ?? "user" });
     const response = NextResponse.json(
-      { message: "Login successful.", user: { id: user._id.toString(), name: user.name, email: user.email } },
+      { message: "Login successful.", user: { id: user._id.toString(), name: user.name, email: user.email, role: user.role ?? "user" } },
       { status: 200 }
     );
 
