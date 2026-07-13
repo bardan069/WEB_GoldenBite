@@ -3,12 +3,13 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import { clearAuthCookies, getTokenCookie, getUserData } from "../cookies";
 import { useRouter } from "next/navigation";
+import { AuthUser } from "../types/auth-user";
 
 interface AuthContextProps {
     isAuthenticated: boolean;
     setIsAuthenticated: (value: boolean) => void;
-    user: any;
-    setUser: (user: any) => void;
+    user: AuthUser | null;
+    setUser: (user: AuthUser | null) => void;
     logout: () => Promise<void>;
     loading: boolean;
     checkAuth: () => Promise<void>;
@@ -18,7 +19,7 @@ const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [user, setUser] = useState<any>(null);
+    const [user, setUser] = useState<AuthUser | null>(null);
     const [loading, setLoading] = useState(true);
     const router = useRouter();
 
@@ -28,7 +29,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             const user = await getUserData();
             setUser(user);
             setIsAuthenticated(!!token);
-        } catch (err) {
+        } catch {
             setIsAuthenticated(false);
             setUser(null);
         } finally {
@@ -37,6 +38,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     useEffect(() => {
+        // Standard mount-time auth check (React's documented "fetching data
+        // in an Effect" pattern) — checkAuth reads cookies asynchronously
+        // before updating state, it isn't a synchronous render-time setState.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         checkAuth();
     }, []);
 
