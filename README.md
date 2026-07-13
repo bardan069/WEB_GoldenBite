@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GoldenBite
 
-## Getting Started
+GoldenBite is a full-stack wellness app for adults: medication reminders, exercise reminders, and diet tracking against targets based on your age.
 
-First, run the development server:
+It is a monorepo with two independent projects:
+
+| Folder | Stack | Docs |
+|---|---|---|
+| [`backend/`](backend/) | Node.js, Express, MongoDB (Mongoose), JWT auth | [backend/README.md](backend/README.md) |
+| [`frontend/`](frontend/) | Next.js (App Router), React, Tailwind CSS | see below |
+
+## Features
+
+- Account registration, login, and profile management (including date of birth, used to personalise diet targets)
+- **Medications**: log dosage/schedule, see what's due today, mark doses taken
+- **Exercises**: schedule routines by day of week, see what's due today, mark sessions complete
+- **Diet**: age-based daily calorie/protein/water targets, with a personal meal log
+- **Admin**: paginated user management for admin accounts
+
+## Quick start
+
+Run the backend and frontend in separate terminals.
 
 ```bash
+# Terminal 1 — backend API (default: http://localhost:8089)
+cd backend
+npm install
+cp .env.example .env
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Terminal 2 — frontend (default: http://localhost:3000)
+cd frontend
+npm install
+npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The frontend rewrites `/api/*` requests to the backend (see `frontend/next.config.ts`, configurable via the `BACKEND_URL` env var).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Testing
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+# Backend: Jest + Supertest against an in-memory MongoDB
+cd backend && npm test
 
-## Learn More
+# Frontend: Jest + React Testing Library (unit tests)
+cd frontend && npm test
 
-To learn more about Next.js, take a look at the following resources:
+# Frontend: Playwright (end-to-end, requires both dev servers running)
+cd frontend && npm run test:e2e
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+backend/    Express REST API (routes -> controllers -> services -> repositories -> models)
+frontend/   Next.js app (App Router pages, server actions, API client, component tests, e2e tests)
+```
