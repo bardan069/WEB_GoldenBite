@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { loginSchema, LoginFormData } from "./schema";
+import PasswordInput from "@/app/_components/PasswordInput";
 import { handleLoginUser } from "@/lib/actions/auth-action";
 import { useAuth } from "@/lib/contexts/AuthContext";
 import { toast } from "react-toastify";
@@ -38,8 +39,8 @@ export default function LoginForm() {
             } else {
                 toast.error(result.message || "Login failed");
             }
-        } catch (error: any) {
-            toast.error(error?.message || "Login failed");
+        } catch (error: unknown) {
+            toast.error(error instanceof Error ? error.message : "Login failed");
         } finally {
             setIsSubmitting(false);
         }
@@ -66,9 +67,8 @@ export default function LoginForm() {
                     <label htmlFor="password" className="block text-sm font-medium text-text-secondary">
                         Password
                     </label>
-                    <input
+                    <PasswordInput
                         id="password"
-                        type="password"
                         {...register("password", { required: "Password is required" })}
                         placeholder="Enter your password"
                         className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-text-primary placeholder:text-text-muted transition-colors focus:border-brand focus:ring-2 focus:ring-brand/20"
