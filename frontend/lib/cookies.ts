@@ -1,6 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
+import { AuthUser } from "./types/auth-user";
 
 export async function setTokenCookie(token: string) {
     const cookieStore = await cookies();
@@ -15,7 +16,7 @@ export async function getTokenCookie() {
     return cookieStore.get("auth_token")?.value;
 }
 
-export async function storeUserData(userData: any) {
+export async function storeUserData(userData: AuthUser) {
     const cookieStore = await cookies();
     cookieStore.set({
         name: "user_data",

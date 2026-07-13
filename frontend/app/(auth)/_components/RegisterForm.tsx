@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { registerSchema, RegisterFormData } from "./schema";
+import PasswordInput from "@/app/_components/PasswordInput";
 import { handleRegisterUser } from "@/lib/actions/auth-action";
 import { toast } from "react-toastify";
 
@@ -35,8 +36,8 @@ export default function RegisterForm() {
             } else {
                 toast.error(result.message || "Registration failed");
             }
-        } catch (error: any) {
-            toast.error(error?.message || "Registration failed");
+        } catch (error: unknown) {
+            toast.error(error instanceof Error ? error.message : "Registration failed");
         } finally {
             setIsSubmitting(false);
         }
@@ -108,9 +109,8 @@ export default function RegisterForm() {
                         <label htmlFor="password" className="block text-sm font-medium text-text-secondary">
                             Password
                         </label>
-                        <input
+                        <PasswordInput
                             id="password"
-                            type="password"
                             {...register("password", { required: "Password is required" })}
                             placeholder="Create a password"
                             className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-text-primary placeholder:text-text-muted transition-colors focus:border-brand focus:ring-2 focus:ring-brand/20"
@@ -122,9 +122,8 @@ export default function RegisterForm() {
                         <label htmlFor="confirmPassword" className="block text-sm font-medium text-text-secondary">
                             Confirm Password
                         </label>
-                        <input
+                        <PasswordInput
                             id="confirmPassword"
-                            type="password"
                             {...register("confirmPassword", { required: "Please confirm your password" })}
                             placeholder="Repeat your password"
                             className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-text-primary placeholder:text-text-muted transition-colors focus:border-brand focus:ring-2 focus:ring-brand/20"
