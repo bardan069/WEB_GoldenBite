@@ -3,15 +3,33 @@
 import Link from "next/link";
 import { useAuth } from "@/lib/contexts/AuthContext";
 import { usePathname } from "next/navigation";
+import Logo from "@/app/_components/Logo";
 
-const navLinks = [
+interface NavLink {
+    href: string;
+    label: string;
+    isNew?: boolean;
+}
+
+const userNavLinks: NavLink[] = [
     { href: "/dashboard", label: "Dashboard" },
+    { href: "/dashboard/medications", label: "Medications" },
+    { href: "/dashboard/exercises", label: "Exercises" },
+    { href: "/dashboard/diet", label: "Diet" },
+    { href: "/dashboard/family", label: "Family", isNew: true },
     { href: "/dashboard/profile", label: "Profile" },
     { href: "/dashboard/password", label: "Password" },
 ];
 
+const adminNavLinks: NavLink[] = [
+    { href: "/dashboard/admin/users", label: "Users" },
+    { href: "/dashboard/profile", label: "Profile" },
+];
+
 export default function DashboardHeader() {
     const { user, logout } = useAuth();
+
+    const navLinks = user?.role === "admin" ? adminNavLinks : userNavLinks;
     const pathname = usePathname();
 
     const getInitials = () => {
@@ -25,8 +43,8 @@ export default function DashboardHeader() {
         <header className="glass rounded-2xl px-6 py-4">
             <div className="flex flex-wrap items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-brand to-brand-dark text-sm font-bold text-white shadow-lg shadow-brand/25">
-                        GB
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-gold-light to-gold shadow-lg shadow-gold/25">
+                        <Logo className="h-5 w-5 text-white" />
                     </div>
                     <span className="text-lg font-bold text-text-primary">Golden Bite</span>
                 </div>
@@ -38,13 +56,16 @@ export default function DashboardHeader() {
                             <Link
                                 key={link.href}
                                 href={link.href}
-                                className={`rounded-lg px-4 py-2 text-sm font-medium transition-all ${
+                                className={`relative rounded-lg px-4 py-2 text-sm font-medium transition-all ${
                                     isActive
                                         ? "bg-brand/10 text-brand"
                                         : "text-text-secondary hover:bg-surface-hover hover:text-text-primary"
                                 }`}
                             >
                                 {link.label}
+                                {link.isNew && (
+                                    <span className="absolute -right-0.5 -top-0.5 h-1.5 w-1.5 rounded-full bg-rust" aria-hidden="true" />
+                                )}
                             </Link>
                         );
                     })}
