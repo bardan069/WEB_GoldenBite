@@ -4,3 +4,7 @@ build/
 node_modules/
 .env*.local
 next-env.d.ts
+coverage/
+test-results/
+playwright-report/
+tsconfig.tsbuildinfo

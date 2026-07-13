@@ -15,8 +15,8 @@ export const handleRegisterUser = async (data: RegisterFormData) => {
         } else {
             return { success: false, message: result.message || "Registration failed" };
         }
-    } catch (error: Error | any) {
-        return { success: false, message: error?.message || "Registration failed" };
+    } catch (error: unknown) {
+        return { success: false, message: error instanceof Error ? error.message : "Registration failed" };
     }
 };
 
@@ -33,8 +33,8 @@ export const handleLoginUser = async (data: LoginFormData) => {
         } else {
             return { success: false, message: result.message || "Login failed" };
         }
-    } catch (error: Error | any) {
-        return { success: false, message: error?.message || "Login failed" };
+    } catch (error: unknown) {
+        return { success: false, message: error instanceof Error ? error.message : "Login failed" };
     }
 };
 
@@ -46,8 +46,8 @@ export const handleUserDetails = async () => {
         } else {
             return { success: false, message: result.message || "Failed to fetch user details" };
         }
-    } catch (error: Error | any) {
-        return { success: false, message: error?.message || "Failed to fetch user details" };
+    } catch (error: unknown) {
+        return { success: false, message: error instanceof Error ? error.message : "Failed to fetch user details" };
     }
 };
 
@@ -61,8 +61,8 @@ export const handleUpdateProfile = async (formData: FormData) => {
         } else {
             return { success: false, message: result.message || "Failed to update profile" };
         }
-    } catch (error: Error | any) {
-        return { success: false, message: error?.message || "Failed to update profile" };
+    } catch (error: unknown) {
+        return { success: false, message: error instanceof Error ? error.message : "Failed to update profile" };
     }
 };
 
@@ -74,8 +74,8 @@ export const handleUpdatePassword = async (data: UpdatePasswordFormData) => {
         } else {
             return { success: false, message: result.message || "Failed to update password" };
         }
-    } catch (error: Error | any) {
-        return { success: false, message: error?.message || "Failed to update password" };
+    } catch (error: unknown) {
+        return { success: false, message: error instanceof Error ? error.message : "Failed to update password" };
     }
 };
 

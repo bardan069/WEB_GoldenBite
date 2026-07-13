@@ -1,21 +1,24 @@
 import axiosInstance from "./axios-instance";
 import { API } from "./endpoints";
+import { getApiErrorMessage } from "./error";
+import { RegisterFormData, LoginFormData } from "@/app/(auth)/_components/schema";
+import { UpdatePasswordFormData } from "@/app/dashboard/_components/schema";
 
-export const register = async (data: any) => {
+export const register = async (data: RegisterFormData) => {
     try {
         const response = await axiosInstance.post(API.AUTH.REGISTER, data);
         return response.data;
-    } catch (error: Error | any) {
-        throw new Error(error?.response?.data?.message || "Registration failed");
+    } catch (error: unknown) {
+        throw new Error(getApiErrorMessage(error, "Registration failed"));
     }
 };
 
-export const login = async (data: any) => {
+export const login = async (data: LoginFormData) => {
     try {
         const response = await axiosInstance.post(API.AUTH.LOGIN, data);
         return response.data;
-    } catch (error: Error | any) {
-        throw new Error(error?.response?.data?.message || "Login failed");
+    } catch (error: unknown) {
+        throw new Error(getApiErrorMessage(error, "Login failed"));
     }
 };
 
@@ -23,12 +26,12 @@ export const whoami = async () => {
     try {
         const response = await axiosInstance.get(API.AUTH.WHOAMI);
         return response.data;
-    } catch (error: Error | any) {
-        throw new Error(error?.response?.data?.message || "Failed to fetch user details");
+    } catch (error: unknown) {
+        throw new Error(getApiErrorMessage(error, "Failed to fetch user details"));
     }
 };
 
-export const updateProfile = async (data: any) => {
+export const updateProfile = async (data: FormData) => {
     try {
         const response = await axiosInstance.put(API.AUTH.UPDATE, data, {
             headers: {
@@ -36,16 +39,16 @@ export const updateProfile = async (data: any) => {
             },
         });
         return response.data;
-    } catch (error: Error | any) {
-        throw new Error(error?.response?.data?.message || "Failed to update profile");
+    } catch (error: unknown) {
+        throw new Error(getApiErrorMessage(error, "Failed to update profile"));
     }
 };
 
-export const updatePassword = async (data: any) => {
+export const updatePassword = async (data: UpdatePasswordFormData) => {
     try {
         const response = await axiosInstance.put(API.AUTH.UPDATE_PASSWORD, data);
         return response.data;
-    } catch (error: Error | any) {
-        throw new Error(error?.response?.data?.message || "Failed to update password");
+    } catch (error: unknown) {
+        throw new Error(getApiErrorMessage(error, "Failed to update password"));
     }
 };

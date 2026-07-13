@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Logo from "@/app/_components/Logo";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
     return (
@@ -10,8 +11,8 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
             <div className="relative mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
                 <header className="glass flex items-center justify-between rounded-2xl px-6 py-3.5">
                     <Link href="/" className="flex items-center gap-2.5">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand to-brand-dark text-sm font-bold text-white shadow-lg shadow-brand/25">
-                            GB
+                        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-gold-light to-gold shadow-lg shadow-gold/25">
+                            <Logo className="h-5 w-5 text-white" />
                         </div>
                         <span className="text-lg font-bold tracking-tight text-text-primary">Golden Bite</span>
                     </Link>
