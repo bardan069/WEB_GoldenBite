@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { updatePasswordSchema, UpdatePasswordFormData } from "./schema";
+import PasswordInput from "@/app/_components/PasswordInput";
 import { handleUpdatePassword } from "@/lib/actions/auth-action";
 import { toast } from "react-toastify";
 
@@ -33,8 +34,8 @@ export default function PasswordResetForm() {
             } else {
                 toast.error(result.message || "Failed to update password");
             }
-        } catch (error: any) {
-            toast.error(error?.message || "Failed to update password");
+        } catch (error: unknown) {
+            toast.error(error instanceof Error ? error.message : "Failed to update password");
         } finally {
             setIsSubmitting(false);
         }
@@ -57,9 +58,8 @@ export default function PasswordResetForm() {
                     <label htmlFor="currentPassword" className="block text-sm font-medium text-text-secondary">
                         Current Password
                     </label>
-                    <input
+                    <PasswordInput
                         id="currentPassword"
-                        type="password"
                         {...register("currentPassword", { required: "Current password is required" })}
                         placeholder="Enter current password"
                         className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-text-primary placeholder:text-text-muted transition-colors focus:border-gold focus:ring-2 focus:ring-gold/20"
@@ -71,9 +71,8 @@ export default function PasswordResetForm() {
                     <label htmlFor="newPassword" className="block text-sm font-medium text-text-secondary">
                         New Password
                     </label>
-                    <input
+                    <PasswordInput
                         id="newPassword"
-                        type="password"
                         {...register("newPassword", { required: "New password is required" })}
                         placeholder="Enter new password"
                         className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-text-primary placeholder:text-text-muted transition-colors focus:border-gold focus:ring-2 focus:ring-gold/20"
@@ -85,9 +84,8 @@ export default function PasswordResetForm() {
                     <label htmlFor="confirmPassword" className="block text-sm font-medium text-text-secondary">
                         Confirm New Password
                     </label>
-                    <input
+                    <PasswordInput
                         id="confirmPassword"
-                        type="password"
                         {...register("confirmPassword", { required: "Please confirm your new password" })}
                         placeholder="Repeat new password"
                         className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-text-primary placeholder:text-text-muted transition-colors focus:border-gold focus:ring-2 focus:ring-gold/20"
@@ -98,7 +96,7 @@ export default function PasswordResetForm() {
                 <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full rounded-xl bg-gradient-to-r from-gold to-amber-600 px-5 py-3 text-base font-semibold text-white shadow-lg shadow-gold/25 transition-all hover:shadow-xl hover:shadow-gold/30 hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-70"
+                    className="w-full rounded-xl bg-gradient-to-r from-gold-light to-gold px-5 py-3 text-base font-semibold text-white shadow-lg shadow-gold/25 transition-all hover:shadow-xl hover:shadow-gold/30 hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-70"
                 >
                     {isSubmitting ? (
                         <span className="flex items-center justify-center gap-2">

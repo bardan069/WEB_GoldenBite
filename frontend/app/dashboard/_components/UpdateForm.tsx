@@ -22,14 +22,18 @@ export default function UpdateForm() {
     } = useForm<UpdateProfileFormData>();
 
     useEffect(() => {
+        // Syncs the form (and image preview) with the auth context's user
+        // object once it loads — an external-system sync, not derived render state.
         if (user) {
             reset({
                 firstName: user.firstName || "",
                 lastName: user.lastName || "",
                 email: user.email || "",
                 username: user.username || "",
+                dateOfBirth: user.dateOfBirth ? String(user.dateOfBirth).slice(0, 10) : "",
             });
             if (user.profileImage) {
+                // eslint-disable-next-line react-hooks/set-state-in-effect
                 setPreview(user.profileImage);
             }
         }
@@ -59,6 +63,9 @@ export default function UpdateForm() {
             formData.append("lastName", parsed.data.lastName);
             formData.append("email", parsed.data.email);
             formData.append("username", parsed.data.username);
+            if (parsed.data.dateOfBirth) {
+                formData.append("dateOfBirth", parsed.data.dateOfBirth);
+            }
             if (selectedFile) {
                 formData.append("profileImage", selectedFile);
             }
@@ -70,8 +77,8 @@ export default function UpdateForm() {
             } else {
                 toast.error(result.message || "Failed to update profile");
             }
-        } catch (error: any) {
-            toast.error(error?.message || "Failed to update profile");
+        } catch (error: unknown) {
+            toast.error(error instanceof Error ? error.message : "Failed to update profile");
         } finally {
             setIsSubmitting(false);
         }
@@ -183,6 +190,18 @@ export default function UpdateForm() {
                         className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-text-primary transition-colors focus:border-brand focus:ring-2 focus:ring-brand/20"
                     />
                     {errors.username && <p className="text-xs text-red-400">{errors.username.message}</p>}
+                </div>
+
+                <div className="space-y-2">
+                    <label htmlFor="dateOfBirth" className="block text-sm font-medium text-text-secondary">Date of Birth</label>
+                    <input
+                        id="dateOfBirth"
+                        type="date"
+                        {...register("dateOfBirth")}
+                        className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-text-primary transition-colors focus:border-brand focus:ring-2 focus:ring-brand/20"
+                    />
+                    <p className="text-xs text-text-muted">Used to personalise your daily diet targets.</p>
+                    {errors.dateOfBirth && <p className="text-xs text-red-400">{errors.dateOfBirth.message}</p>}
                 </div>
 
                 <button
