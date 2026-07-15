@@ -52,7 +52,7 @@ export class UserController {
 
     async updateUser(req: Request, res: Response) {
         try {
-            const userId = req.user!._id;
+            const userId = req.user!._id.toString();
             const userData = UpdateUserDTO.safeParse(req.body);
             if (!userData.success) {
                 return ApiResponseHelper.error(res, z.prettifyError(userData.error), 400);
@@ -72,7 +72,7 @@ export class UserController {
 
     async updatePassword(req: Request, res: Response) {
         try {
-            const userId = req.user!._id;
+            const userId = req.user!._id.toString();
             const passwordData = UpdatePasswordDTO.safeParse(req.body);
             if (!passwordData.success) {
                 return ApiResponseHelper.error(res, z.prettifyError(passwordData.error), 400);
