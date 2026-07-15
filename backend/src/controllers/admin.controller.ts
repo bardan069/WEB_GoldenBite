@@ -27,8 +27,9 @@ export class AdminController {
             const { page, limit, search } = query.data;
             const result = await adminService.listUsers(page, limit, search);
             return ApiResponseHelper.success(res, result, "Users fetched successfully");
-        } catch (error: any) {
-            return ApiResponseHelper.error(res, error.message || "Internal Server Error", error.status || 500);
+        } catch (error) {
+            const { status, message } = ApiResponseHelper.resolveError(error);
+            return ApiResponseHelper.error(res, message, status);
         }
     }
 
@@ -45,8 +46,9 @@ export class AdminController {
                 delete: `/api/v1/admin/users/${user._id}`,
             });
             return ApiResponseHelper.success(res, withHateoas, "User fetched successfully");
-        } catch (error: any) {
-            return ApiResponseHelper.error(res, error.message || "Internal Server Error", error.status || 500);
+        } catch (error) {
+            const { status, message } = ApiResponseHelper.resolveError(error);
+            return ApiResponseHelper.error(res, message, status);
         }
     }
 
@@ -62,8 +64,9 @@ export class AdminController {
             }
             const user = await adminService.createUser(parsed.data);
             return ApiResponseHelper.success(res, user, "User created successfully", 201);
-        } catch (error: any) {
-            return ApiResponseHelper.error(res, error.message || "Internal Server Error", error.status || 500);
+        } catch (error) {
+            const { status, message } = ApiResponseHelper.resolveError(error);
+            return ApiResponseHelper.error(res, message, status);
         }
     }
 
@@ -79,8 +82,9 @@ export class AdminController {
             }
             const user = await adminService.updateUser(req.params.id as string, parsed.data);
             return ApiResponseHelper.success(res, user, "User updated successfully");
-        } catch (error: any) {
-            return ApiResponseHelper.error(res, error.message || "Internal Server Error", error.status || 500);
+        } catch (error) {
+            const { status, message } = ApiResponseHelper.resolveError(error);
+            return ApiResponseHelper.error(res, message, status);
         }
     }
 
@@ -92,8 +96,9 @@ export class AdminController {
         try {
             await adminService.deleteUser(req.params.id as string);
             return ApiResponseHelper.success(res, null, "User deleted successfully");
-        } catch (error: any) {
-            return ApiResponseHelper.error(res, error.message || "Internal Server Error", error.status || 500);
+        } catch (error) {
+            const { status, message } = ApiResponseHelper.resolveError(error);
+            return ApiResponseHelper.error(res, message, status);
         }
     }
 }
