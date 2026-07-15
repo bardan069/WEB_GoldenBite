@@ -20,8 +20,9 @@ export class DietController {
         try {
             const recommendation = dietService.getRecommendation(req.user!.dateOfBirth);
             return ApiResponseHelper.success(res, recommendation, "Diet recommendation fetched successfully");
-        } catch (error: any) {
-            return ApiResponseHelper.error(res, error.message || "Internal Server Error", error.status || 500);
+        } catch (error) {
+            const { status, message } = ApiResponseHelper.resolveError(error);
+            return ApiResponseHelper.error(res, message, status);
         }
     }
 
@@ -31,8 +32,9 @@ export class DietController {
             const userId = req.user!._id;
             const entries = await dietService.listEntries(userId);
             return ApiResponseHelper.success(res, entries, "Meal entries fetched successfully");
-        } catch (error: any) {
-            return ApiResponseHelper.error(res, error.message || "Internal Server Error", error.status || 500);
+        } catch (error) {
+            const { status, message } = ApiResponseHelper.resolveError(error);
+            return ApiResponseHelper.error(res, message, status);
         }
     }
 
@@ -47,8 +49,9 @@ export class DietController {
                 delete: `/api/v1/diet/entries/${entry._id}`,
             });
             return ApiResponseHelper.success(res, withHateoas, "Meal entry fetched successfully");
-        } catch (error: any) {
-            return ApiResponseHelper.error(res, error.message || "Internal Server Error", error.status || 500);
+        } catch (error) {
+            const { status, message } = ApiResponseHelper.resolveError(error);
+            return ApiResponseHelper.error(res, message, status);
         }
     }
 
@@ -62,8 +65,9 @@ export class DietController {
             const userId = req.user!._id;
             const entry = await dietService.createEntry(userId, parsed.data);
             return ApiResponseHelper.success(res, entry, "Meal entry created successfully", 201);
-        } catch (error: any) {
-            return ApiResponseHelper.error(res, error.message || "Internal Server Error", error.status || 500);
+        } catch (error) {
+            const { status, message } = ApiResponseHelper.resolveError(error);
+            return ApiResponseHelper.error(res, message, status);
         }
     }
 
@@ -77,8 +81,9 @@ export class DietController {
             const userId = req.user!._id;
             const entry = await dietService.updateEntry(userId, req.params.id as string, parsed.data);
             return ApiResponseHelper.success(res, entry, "Meal entry updated successfully");
-        } catch (error: any) {
-            return ApiResponseHelper.error(res, error.message || "Internal Server Error", error.status || 500);
+        } catch (error) {
+            const { status, message } = ApiResponseHelper.resolveError(error);
+            return ApiResponseHelper.error(res, message, status);
         }
     }
 
@@ -88,8 +93,9 @@ export class DietController {
             const userId = req.user!._id;
             await dietService.deleteEntry(userId, req.params.id as string);
             return ApiResponseHelper.success(res, null, "Meal entry deleted successfully");
-        } catch (error: any) {
-            return ApiResponseHelper.error(res, error.message || "Internal Server Error", error.status || 500);
+        } catch (error) {
+            const { status, message } = ApiResponseHelper.resolveError(error);
+            return ApiResponseHelper.error(res, message, status);
         }
     }
 
@@ -105,8 +111,9 @@ export class DietController {
                 file.mimetype as "image/jpeg" | "image/png"
             );
             return ApiResponseHelper.success(res, analysis, "Photo analyzed successfully");
-        } catch (error: any) {
-            return ApiResponseHelper.error(res, error.message || "Internal Server Error", error.status || 500);
+        } catch (error) {
+            const { status, message } = ApiResponseHelper.resolveError(error);
+            return ApiResponseHelper.error(res, message, status);
         } finally {
             if (file) fs.unlink(file.path, () => {});
         }
