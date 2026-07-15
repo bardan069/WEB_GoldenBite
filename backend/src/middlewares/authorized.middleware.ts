@@ -9,7 +9,7 @@ import { ApiResponseHelper } from "../utils/apihelper.util";
 declare global {
     namespace Express {
         interface Request {
-            user?: Record<string, any> | IUser;
+            user?: IUser;
         }
     }
 }
@@ -25,7 +25,7 @@ export const authorizedMiddleware = async (req: Request, res: Response, next: Ne
         const token = authHeader.split(" ")[1];
         if (!token) throw new HttpException(401, "Unauthorized JWT missing");
 
-        const decodedToken = jwt.verify(token, SECRET_KEY) as Record<string, any>;
+        const decodedToken = jwt.verify(token, SECRET_KEY) as jwt.JwtPayload & { id: string };
         if (!decodedToken || !decodedToken.id) {
             throw new HttpException(401, "Unauthorized JWT unverified");
         }
@@ -35,12 +35,9 @@ export const authorizedMiddleware = async (req: Request, res: Response, next: Ne
 
         req.user = user;
         return next();
-    } catch (err: Error | any) {
-        return ApiResponseHelper.error(
-            res,
-            err.message || "Internal Server Error",
-            err.status || 500
-        );
+    } catch (err) {
+        const { status, message } = ApiResponseHelper.resolveError(err);
+        return ApiResponseHelper.error(res, message, status);
     }
 };
 
@@ -53,11 +50,8 @@ export const adminMiddleware = async (req: Request, res: Response, next: NextFun
             throw new HttpException(403, "Forbidden not admin");
         }
         return next();
-    } catch (err: Error | any) {
-        return ApiResponseHelper.error(
-            res,
-            err.message || "Internal Server Error",
-            err.status || 500
-        );
+    } catch (err) {
+        const { status, message } = ApiResponseHelper.resolveError(err);
+        return ApiResponseHelper.error(res, message, status);
     }
 };
