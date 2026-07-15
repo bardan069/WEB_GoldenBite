@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useAuth } from "@/lib/contexts/AuthContext";
 import { usePathname } from "next/navigation";
 import Logo from "@/app/_components/Logo";
@@ -75,9 +76,11 @@ export default function DashboardHeader() {
                     {user && (
                         <div className="flex items-center gap-2.5">
                             {user.profileImage ? (
-                                <img
+                                <Image
                                     src={user.profileImage}
                                     alt="Avatar"
+                                    width={32}
+                                    height={32}
                                     className="h-8 w-8 rounded-full object-cover ring-2 ring-border"
                                 />
                             ) : (
