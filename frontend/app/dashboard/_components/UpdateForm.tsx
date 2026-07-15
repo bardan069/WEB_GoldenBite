@@ -109,6 +109,8 @@ export default function UpdateForm() {
                 <div className="flex items-center gap-5 pb-6 border-b border-border">
                     <div className="relative group">
                         {preview ? (
+                            // next/image can't optimize blob: URLs from the local file picker
+                            // eslint-disable-next-line @next/next/no-img-element
                             <img
                                 src={preview}
                                 alt="Profile preview"
