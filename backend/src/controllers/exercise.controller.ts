@@ -16,7 +16,7 @@ export class ExerciseController {
     /** GET /api/v1/exercises */
     async list(req: Request, res: Response) {
         try {
-            const userId = req.user!._id;
+            const userId = req.user!._id.toString();
             const exercises = await exerciseService.list(userId);
             return ApiResponseHelper.success(res, exercises, "Exercises fetched successfully");
         } catch (error) {
@@ -28,7 +28,7 @@ export class ExerciseController {
     /** GET /api/v1/exercises/today */
     async listDueToday(req: Request, res: Response) {
         try {
-            const userId = req.user!._id;
+            const userId = req.user!._id.toString();
             const exercises = await exerciseService.listDueToday(userId);
             return ApiResponseHelper.success(res, exercises, "Today's exercises fetched successfully");
         } catch (error) {
@@ -40,7 +40,7 @@ export class ExerciseController {
     /** GET /api/v1/exercises/:id */
     async getById(req: Request, res: Response) {
         try {
-            const userId = req.user!._id;
+            const userId = req.user!._id.toString();
             const exercise = await exerciseService.getById(userId, req.params.id as string);
             const withHateoas = withLinks(exercise, {
                 self: `/api/v1/exercises/${exercise._id}`,
@@ -61,7 +61,7 @@ export class ExerciseController {
             if (!parsed.success) {
                 return ApiResponseHelper.error(res, z.prettifyError(parsed.error), 400);
             }
-            const userId = req.user!._id;
+            const userId = req.user!._id.toString();
             const exercise = await exerciseService.create(userId, parsed.data);
             return ApiResponseHelper.success(res, exercise, "Exercise created successfully", 201);
         } catch (error) {
@@ -77,7 +77,7 @@ export class ExerciseController {
             if (!parsed.success) {
                 return ApiResponseHelper.error(res, z.prettifyError(parsed.error), 400);
             }
-            const userId = req.user!._id;
+            const userId = req.user!._id.toString();
             const exercise = await exerciseService.update(userId, req.params.id as string, parsed.data);
             return ApiResponseHelper.success(res, exercise, "Exercise updated successfully");
         } catch (error) {
@@ -89,7 +89,7 @@ export class ExerciseController {
     /** DELETE /api/v1/exercises/:id */
     async delete(req: Request, res: Response) {
         try {
-            const userId = req.user!._id;
+            const userId = req.user!._id.toString();
             await exerciseService.delete(userId, req.params.id as string);
             return ApiResponseHelper.success(res, null, "Exercise deleted successfully");
         } catch (error) {
@@ -101,7 +101,7 @@ export class ExerciseController {
     /** PATCH /api/v1/exercises/:id/complete */
     async markComplete(req: Request, res: Response) {
         try {
-            const userId = req.user!._id;
+            const userId = req.user!._id.toString();
             const exercise = await exerciseService.markComplete(userId, req.params.id as string);
             return ApiResponseHelper.success(res, exercise, "Exercise marked as complete");
         } catch (error) {
