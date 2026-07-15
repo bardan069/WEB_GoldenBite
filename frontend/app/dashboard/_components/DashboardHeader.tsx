@@ -11,6 +11,7 @@ interface NavLink {
     label: string;
     isNew?: boolean;
 }
+a
 
 const userNavLinks: NavLink[] = [
     { href: "/dashboard", label: "Dashboard" },
