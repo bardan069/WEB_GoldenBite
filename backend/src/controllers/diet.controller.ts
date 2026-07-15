@@ -29,7 +29,7 @@ export class DietController {
     /** GET /api/v1/diet/entries */
     async listEntries(req: Request, res: Response) {
         try {
-            const userId = req.user!._id;
+            const userId = req.user!._id.toString();
             const entries = await dietService.listEntries(userId);
             return ApiResponseHelper.success(res, entries, "Meal entries fetched successfully");
         } catch (error) {
@@ -41,7 +41,7 @@ export class DietController {
     /** GET /api/v1/diet/entries/:id */
     async getEntryById(req: Request, res: Response) {
         try {
-            const userId = req.user!._id;
+            const userId = req.user!._id.toString();
             const entry = await dietService.getEntryById(userId, req.params.id as string);
             const withHateoas = withLinks(entry, {
                 self: `/api/v1/diet/entries/${entry._id}`,
@@ -62,7 +62,7 @@ export class DietController {
             if (!parsed.success) {
                 return ApiResponseHelper.error(res, z.prettifyError(parsed.error), 400);
             }
-            const userId = req.user!._id;
+            const userId = req.user!._id.toString();
             const entry = await dietService.createEntry(userId, parsed.data);
             return ApiResponseHelper.success(res, entry, "Meal entry created successfully", 201);
         } catch (error) {
@@ -78,7 +78,7 @@ export class DietController {
             if (!parsed.success) {
                 return ApiResponseHelper.error(res, z.prettifyError(parsed.error), 400);
             }
-            const userId = req.user!._id;
+            const userId = req.user!._id.toString();
             const entry = await dietService.updateEntry(userId, req.params.id as string, parsed.data);
             return ApiResponseHelper.success(res, entry, "Meal entry updated successfully");
         } catch (error) {
@@ -90,7 +90,7 @@ export class DietController {
     /** DELETE /api/v1/diet/entries/:id */
     async deleteEntry(req: Request, res: Response) {
         try {
-            const userId = req.user!._id;
+            const userId = req.user!._id.toString();
             await dietService.deleteEntry(userId, req.params.id as string);
             return ApiResponseHelper.success(res, null, "Meal entry deleted successfully");
         } catch (error) {
