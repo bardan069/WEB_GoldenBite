@@ -16,7 +16,7 @@ export class MedicationController {
     /** GET /api/v1/medications */
     async list(req: Request, res: Response) {
         try {
-            const userId = req.user!._id;
+            const userId = req.user!._id.toString();
             const medications = await medicationService.list(userId);
             return ApiResponseHelper.success(res, medications, "Medications fetched successfully");
         } catch (error) {
@@ -28,7 +28,7 @@ export class MedicationController {
     /** GET /api/v1/medications/today */
     async listDueToday(req: Request, res: Response) {
         try {
-            const userId = req.user!._id;
+            const userId = req.user!._id.toString();
             const medications = await medicationService.listDueToday(userId);
             return ApiResponseHelper.success(res, medications, "Today's medications fetched successfully");
         } catch (error) {
@@ -40,7 +40,7 @@ export class MedicationController {
     /** GET /api/v1/medications/:id */
     async getById(req: Request, res: Response) {
         try {
-            const userId = req.user!._id;
+            const userId = req.user!._id.toString();
             const medication = await medicationService.getById(userId, req.params.id as string);
             const withHateoas = withLinks(medication, {
                 self: `/api/v1/medications/${medication._id}`,
@@ -61,7 +61,7 @@ export class MedicationController {
             if (!parsed.success) {
                 return ApiResponseHelper.error(res, z.prettifyError(parsed.error), 400);
             }
-            const userId = req.user!._id;
+            const userId = req.user!._id.toString();
             const medication = await medicationService.create(userId, parsed.data);
             return ApiResponseHelper.success(res, medication, "Medication created successfully", 201);
         } catch (error) {
@@ -77,7 +77,7 @@ export class MedicationController {
             if (!parsed.success) {
                 return ApiResponseHelper.error(res, z.prettifyError(parsed.error), 400);
             }
-            const userId = req.user!._id;
+            const userId = req.user!._id.toString();
             const medication = await medicationService.update(userId, req.params.id as string, parsed.data);
             return ApiResponseHelper.success(res, medication, "Medication updated successfully");
         } catch (error) {
@@ -89,7 +89,7 @@ export class MedicationController {
     /** DELETE /api/v1/medications/:id */
     async delete(req: Request, res: Response) {
         try {
-            const userId = req.user!._id;
+            const userId = req.user!._id.toString();
             await medicationService.delete(userId, req.params.id as string);
             return ApiResponseHelper.success(res, null, "Medication deleted successfully");
         } catch (error) {
@@ -101,7 +101,7 @@ export class MedicationController {
     /** PATCH /api/v1/medications/:id/taken */
     async markTaken(req: Request, res: Response) {
         try {
-            const userId = req.user!._id;
+            const userId = req.user!._id.toString();
             const medication = await medicationService.markTaken(userId, req.params.id as string);
             return ApiResponseHelper.success(res, medication, "Medication marked as taken");
         } catch (error) {
