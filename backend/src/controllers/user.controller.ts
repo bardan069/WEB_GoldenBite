@@ -16,12 +16,9 @@ export class UserController {
 
             const user = await userService.createUser(userData.data);
             return ApiResponseHelper.success(res, user, "User created successfully");
-        } catch (error: Error | any | unknown) {
-            return ApiResponseHelper.error(
-                res,
-                error.message || "Internal Server Error",
-                error.status || 500
-            );
+        } catch (error) {
+            const { status, message } = ApiResponseHelper.resolveError(error);
+            return ApiResponseHelper.error(res, message, status);
         }
     }
 
@@ -34,12 +31,9 @@ export class UserController {
 
             const { user, token } = await userService.loginUser(parsedData.data);
             return ApiResponseHelper.success(res, { user, token }, "Login successful");
-        } catch (error: Error | any | unknown) {
-            return ApiResponseHelper.error(
-                res,
-                error.message || "Internal Server Error",
-                error.status || 500
-            );
+        } catch (error) {
+            const { status, message } = ApiResponseHelper.resolveError(error);
+            return ApiResponseHelper.error(res, message, status);
         }
     }
 
@@ -50,12 +44,9 @@ export class UserController {
                 return ApiResponseHelper.error(res, "User not found", 404);
             }
             return ApiResponseHelper.success(res, user, "User details fetched successfully");
-        } catch (error: Error | any | unknown) {
-            return ApiResponseHelper.error(
-                res,
-                error.message || "Internal Server Error",
-                error.status || 500
-            );
+        } catch (error) {
+            const { status, message } = ApiResponseHelper.resolveError(error);
+            return ApiResponseHelper.error(res, message, status);
         }
     }
 
@@ -73,12 +64,9 @@ export class UserController {
 
             const updatedUser = await userService.updateUser(userId, userData.data);
             return ApiResponseHelper.success(res, updatedUser, "User updated successfully");
-        } catch (error: Error | any | unknown) {
-            return ApiResponseHelper.error(
-                res,
-                error.message || "Internal Server Error",
-                error.status || 500
-            );
+        } catch (error) {
+            const { status, message } = ApiResponseHelper.resolveError(error);
+            return ApiResponseHelper.error(res, message, status);
         }
     }
 
@@ -92,12 +80,9 @@ export class UserController {
 
             await userService.updatePassword(userId, passwordData.data);
             return ApiResponseHelper.success(res, null, "Password updated successfully");
-        } catch (error: Error | any | unknown) {
-            return ApiResponseHelper.error(
-                res,
-                error.message || "Internal Server Error",
-                error.status || 500
-            );
+        } catch (error) {
+            const { status, message } = ApiResponseHelper.resolveError(error);
+            return ApiResponseHelper.error(res, message, status);
         }
     }
 }
