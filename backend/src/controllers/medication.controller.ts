@@ -19,8 +19,9 @@ export class MedicationController {
             const userId = req.user!._id;
             const medications = await medicationService.list(userId);
             return ApiResponseHelper.success(res, medications, "Medications fetched successfully");
-        } catch (error: any) {
-            return ApiResponseHelper.error(res, error.message || "Internal Server Error", error.status || 500);
+        } catch (error) {
+            const { status, message } = ApiResponseHelper.resolveError(error);
+            return ApiResponseHelper.error(res, message, status);
         }
     }
 
@@ -30,8 +31,9 @@ export class MedicationController {
             const userId = req.user!._id;
             const medications = await medicationService.listDueToday(userId);
             return ApiResponseHelper.success(res, medications, "Today's medications fetched successfully");
-        } catch (error: any) {
-            return ApiResponseHelper.error(res, error.message || "Internal Server Error", error.status || 500);
+        } catch (error) {
+            const { status, message } = ApiResponseHelper.resolveError(error);
+            return ApiResponseHelper.error(res, message, status);
         }
     }
 
@@ -46,8 +48,9 @@ export class MedicationController {
                 delete: `/api/v1/medications/${medication._id}`,
             });
             return ApiResponseHelper.success(res, withHateoas, "Medication fetched successfully");
-        } catch (error: any) {
-            return ApiResponseHelper.error(res, error.message || "Internal Server Error", error.status || 500);
+        } catch (error) {
+            const { status, message } = ApiResponseHelper.resolveError(error);
+            return ApiResponseHelper.error(res, message, status);
         }
     }
 
@@ -61,8 +64,9 @@ export class MedicationController {
             const userId = req.user!._id;
             const medication = await medicationService.create(userId, parsed.data);
             return ApiResponseHelper.success(res, medication, "Medication created successfully", 201);
-        } catch (error: any) {
-            return ApiResponseHelper.error(res, error.message || "Internal Server Error", error.status || 500);
+        } catch (error) {
+            const { status, message } = ApiResponseHelper.resolveError(error);
+            return ApiResponseHelper.error(res, message, status);
         }
     }
 
@@ -76,8 +80,9 @@ export class MedicationController {
             const userId = req.user!._id;
             const medication = await medicationService.update(userId, req.params.id as string, parsed.data);
             return ApiResponseHelper.success(res, medication, "Medication updated successfully");
-        } catch (error: any) {
-            return ApiResponseHelper.error(res, error.message || "Internal Server Error", error.status || 500);
+        } catch (error) {
+            const { status, message } = ApiResponseHelper.resolveError(error);
+            return ApiResponseHelper.error(res, message, status);
         }
     }
 
@@ -87,8 +92,9 @@ export class MedicationController {
             const userId = req.user!._id;
             await medicationService.delete(userId, req.params.id as string);
             return ApiResponseHelper.success(res, null, "Medication deleted successfully");
-        } catch (error: any) {
-            return ApiResponseHelper.error(res, error.message || "Internal Server Error", error.status || 500);
+        } catch (error) {
+            const { status, message } = ApiResponseHelper.resolveError(error);
+            return ApiResponseHelper.error(res, message, status);
         }
     }
 
@@ -98,8 +104,9 @@ export class MedicationController {
             const userId = req.user!._id;
             const medication = await medicationService.markTaken(userId, req.params.id as string);
             return ApiResponseHelper.success(res, medication, "Medication marked as taken");
-        } catch (error: any) {
-            return ApiResponseHelper.error(res, error.message || "Internal Server Error", error.status || 500);
+        } catch (error) {
+            const { status, message } = ApiResponseHelper.resolveError(error);
+            return ApiResponseHelper.error(res, message, status);
         }
     }
 }
